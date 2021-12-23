@@ -3,7 +3,8 @@ import {
     View,
     Text,
     Image,
-    TouchableOpacity
+    TouchableOpacity,
+    StatusBar
 } from 'react-native';
 import {
     createDrawerNavigator,
@@ -209,6 +210,7 @@ const CustomDrawer = ({ selectedTab, setSelectedTab }) => {
                 backgroundColor: COLORS.primary
             }}
         >
+            <StatusBar backgroundColor={COLORS.primary} barStyle='light-content' />
             <Drawer.Navigator
                 screenOptions={{
                     drawerType: 'slide',

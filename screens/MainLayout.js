@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
     View,
     Text,
@@ -74,12 +74,13 @@ const TabButton = ({ label, icon, isFocused, onPress, outerContainerStyle, inner
                     }
                 </Animated.View>
             </Animated.View>
-
         </TouchableWithoutFeedback>
     )
 };
 
 const MainLayout = ({ navigation, selectedTab, setSelectedTab }) => {
+
+    const flatListRef = useRef();
 
     // reanimated shared value
 
@@ -175,6 +176,10 @@ const MainLayout = ({ navigation, selectedTab, setSelectedTab }) => {
 
     useEffect(() => {
         if (selectedTab == constants.screens.home) {
+            flatListRef?.current?.scrollToIndex({
+                index: 0,
+                animated: false
+            })
             homeTabFlex.value = withTiming(4, { duration: 500 })
             homeTabColor.value = withTiming(COLORS.primary, { duration: 500 })
         } else {
@@ -183,6 +188,10 @@ const MainLayout = ({ navigation, selectedTab, setSelectedTab }) => {
         }
 
         if (selectedTab == constants.screens.search) {
+            flatListRef?.current?.scrollToIndex({
+                index: 1,
+                animated: false
+            })
             searchTabFlex.value = withTiming(4, { duration: 500 })
             searchTabColor.value = withTiming(COLORS.primary, { duration: 500 })
         } else {
@@ -191,6 +200,10 @@ const MainLayout = ({ navigation, selectedTab, setSelectedTab }) => {
         }
 
         if (selectedTab == constants.screens.cart) {
+            flatListRef?.current?.scrollToIndex({
+                index: 2,
+                animated: false
+            })
             cartTabFlex.value = withTiming(4, { duration: 500 })
             cartTabColor.value = withTiming(COLORS.primary, { duration: 500 })
         } else {
@@ -199,6 +212,10 @@ const MainLayout = ({ navigation, selectedTab, setSelectedTab }) => {
         }
 
         if (selectedTab == constants.screens.favourite) {
+            flatListRef?.current?.scrollToIndex({
+                index: 3,
+                animated: false
+            })
             favouriteTabFlex.value = withTiming(4, { duration: 500 })
             favouriteTabColor.value = withTiming(COLORS.primary, { duration: 500 })
         } else {
@@ -207,6 +224,10 @@ const MainLayout = ({ navigation, selectedTab, setSelectedTab }) => {
         }
 
         if (selectedTab == constants.screens.notification) {
+            flatListRef?.current?.scrollToIndex({
+                index: 4,
+                animated: false
+            })
             notificationTabFlex.value = withTiming(4, { duration: 500 })
             notificationTabColor.value = withTiming(COLORS.primary, { duration: 500 })
         } else {
@@ -228,7 +249,7 @@ const MainLayout = ({ navigation, selectedTab, setSelectedTab }) => {
                 containerStyle={{
                     height: 50,
                     paddingHorizontal: SIZES.padding,
-                    marginTop: 40,
+                    // marginTop: 40,
                     alignItems: 'center'
                 }}
                 title={selectedTab.toUpperCase()}
@@ -270,9 +291,36 @@ const MainLayout = ({ navigation, selectedTab, setSelectedTab }) => {
             {/* Content */}
 
             <View style={{
-                flex: 1
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center'
             }}>
-                <Text>MainLayout</Text>
+                <FlatList
+                    ref={flatListRef}
+                    horizontal
+                    scrollEnabled={false}
+                    pagingEnabled
+                    snapToAlignment='center'
+                    snapToInterval={SIZES.width}
+                    showsHorizontalScrollIndicator={false}
+                    data={constants.bottom_tabs}
+                    keyExtractor={item => `${item.id}`}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <View
+                                style={{
+                                    height: SIZES.height,
+                                    width: SIZES.width
+                                }}>
+                                {item.label === constants.screens.home && <Home />}
+                                {item.label === constants.screens.search && <Search />}
+                                {item.label === constants.screens.cart && <CartTab />}
+                                {item.label === constants.screens.favourite && <Favourite />}
+                                {item.label === constants.screens.notification && <Notification />}
+                            </View>
+                        )
+                    }}
+                />
             </View>
 
             {/* Footer - Custom bottom tab */}
@@ -309,8 +357,8 @@ const MainLayout = ({ navigation, selectedTab, setSelectedTab }) => {
                     paddingBottom: 10,
                     borderTopRightRadius: 20,
                     borderTopLeftRadius: 20,
-                    borderBottomLeftRadius:20,
-                    borderBottomRightRadius:20,
+                    borderBottomLeftRadius: 20,
+                    borderBottomRightRadius: 20,
                     backgroundColor: COLORS.white
                 }}>
                     <TabButton
