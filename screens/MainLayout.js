@@ -5,7 +5,9 @@ import {
     TouchableOpacity,
     TouchableWithoutFeedback,
     Image,
-    FlatList
+    FlatList,
+    Platform,
+    StatusBar
 } from 'react-native';
 import { useDrawerProgress } from '@react-navigation/drawer';
 import Animated, { useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated';
@@ -244,12 +246,13 @@ const MainLayout = ({ navigation, selectedTab, setSelectedTab }) => {
                 ...animatedStyle
             }}
         >
+
             {/* Header */}
             <Header
                 containerStyle={{
                     height: 50,
                     paddingHorizontal: SIZES.padding,
-                    // marginTop: 40,
+                    marginTop: Platform.OS === 'ios' ? 40 : 0,
                     alignItems: 'center'
                 }}
                 title={selectedTab.toUpperCase()}
